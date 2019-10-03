@@ -3,7 +3,10 @@ console.info('Zipcheck input plugin loaded!');
 let global_zipcode;
 
 const zipcodeRegex = /([1-9][0-9]{3})\s*([a-zA-Z]{2})/;
+<<<<<<< HEAD
 const zipcodeStartRegex = /([1-9][0-9]{3})/
+=======
+>>>>>>> 6f71fe122311af3af49b86a10d24fae017b9c87c
 const housenrRegex = /([0-9]+)[^a-zA-Z\n]?([a-zA-Z])*/;
 
 
@@ -120,7 +123,6 @@ jQuery(document).ready(function($) {
 
         // Checks for housenrs with and without extensions;
         let housenrMatch = paste.match(housenrRegex);
-        console.log(housenrMatch);
         if(housenrMatch !== null){
             usedPaste = true;
             $('input.zipcheck-housenr').val(housenrMatch[1]).trigger('change'); 
