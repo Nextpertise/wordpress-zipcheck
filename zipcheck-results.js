@@ -80,7 +80,7 @@ jQuery(document).ready(function($) {
       // Sorts the list that has all the different options.
       function sortAllResults(){
         function buildString(result){
-          if(result['provider'].toUpperCase() == "KPNWBA"){
+          if(result['provider'].toUpperCase() === "KPNWBA"){
             return (result['provider'] + result['header']).toUpperCase();
           }else{
             return (result['provider'] + result['carrier']).toUpperCase();
@@ -97,7 +97,7 @@ jQuery(document).ready(function($) {
             }else{
               return 1
             }
-          }catch{
+          }catch (error) {
             return 0;
           }
         });
@@ -192,12 +192,13 @@ jQuery(document).ready(function($) {
 
       // Create the HTML within JavaScript. Using normal `+` instead of template literals for IE 11 support.  
       function createResultBox(result){
-        let title = "<h2>" + result['header'] + "</h2>";
+        let title = "<h2>" + result['header'].replace('Fiber', 'Glasvezel') + "</h2>";
         let subtitle = "<p> via " + result['provider'] + "</p>";
         let speedup = '<h3><img src="http://new.nextpertise.nl/wp-content/uploads/2018/10/arrow-up.svg" alt="down">' + createSpeedDisplayValue(result['max_upload']) + '</h3>';
         let speeddown = '<h3><img src="http://new.nextpertise.nl/wp-content/uploads/2018/10/arrow-down.svg" alt="down">' + createSpeedDisplayValue(result['max_download']) + '</h3>';
         let shouldAddDivider = (result['area'] !== undefined && result['area'] != "" && result['distance'] !== undefined && result['distance'] != "")
         let area = "<p>" + result['area'] + (shouldAddDivider ? ", " : "") + result['distance'].replace(";", ", ") + "</p>";
+        let smallSubText = (result['carrier'].toUpperCase() === "COPPER" && result['provider'].toUpperCase() === "KPNWBA") ? "Verwachte snelheid" : "";
 
         let html = '\
           <div class="postcode-result-box result-item">\
@@ -206,7 +207,8 @@ jQuery(document).ready(function($) {
             </div>\
             <div class="postcode-right-part">\
               <div class="speed-part">\
-              ' + speedup + speeddown + '\
+              <p class="light-text">' + smallSubText + '</p>\
+              ' + speeddown + speedup + '\
                 <p></p>\
               </div>\
               ' + area + '\
