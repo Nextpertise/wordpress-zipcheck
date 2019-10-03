@@ -1,0 +1,76 @@
+#zipcheck-housenr{
+    transition: color 0.25s;
+}
+.row > .form-grp.loader-active::before, .row > .form-grp.loader-active::after{
+    box-sizing: inherit;
+    content: '';
+    position: absolute;
+    width: 0;
+    top: 0;
+    left: 15px;
+}
+
+.row > .form-grp.loader-active::before{
+    border-top: 2px solid #0070ba;
+    animation: zipcheck_loader 2s ease-in-out infinite;
+}
+.row > .form-grp.loader-active::after{
+    border-top: 2px solid #d3e7f3;
+    animation: zipcheck_loader 2s ease 0.4s infinite;
+}
+
+@keyframes zipcheck_loader {
+	0% {
+		width: 0;
+    }
+    25%{
+        width: 0;
+    }
+    75%{
+        width: calc(100% - 30px);
+    }
+	100% {
+		width: calc(100% - 30px);
+	}
+}
+
+/* Loading spinner */
+.postcode-result-box.spinner-box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.circular {
+  animation: rotate 2s linear infinite;
+  height: 100px;
+  position: relative;
+  width: 100px;
+}
+
+.path {
+  stroke-dasharray: 1,200;
+  stroke-dashoffset: 0;
+  animation: dash 1.5s ease-in-out infinite;
+  stroke-linecap: round;
+  stroke: #0070ba;;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1,200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 89,200;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 89,200;
+    stroke-dashoffset: -124;
+  }
+}
