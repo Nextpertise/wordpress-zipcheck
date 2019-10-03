@@ -218,5 +218,13 @@ jQuery(document).ready(function($) {
         return html;
       }
 
+      // Sets the inputs to the inputs submitted.
+      function populateInputs(params){
+        $(".zipcheck-zipcode").val(params['zipcheck-zipcode']);
+        $(".zipcheck-housenr").val(params['zipcheck-housenr']);
+        $(".zipcheck-ext").val(params['zipcheck-ext']);
+      }
+
       listProviders(getAndInsertDataFromProviders);
+      populateInputs(getParameters());
 });
