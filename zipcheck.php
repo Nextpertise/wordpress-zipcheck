@@ -7,8 +7,117 @@
 * Author URI: https://www.nextpertise.nl/
 **/
 
+/// --------------------------------------------------------------------------------------------------------------
+/// ADMIN/SETTINGS PAGE
+/// --------------------------------------------------------------------------------------------------------------
+
+
+/// Register settings page functions
+add_action('admin_menu', 'nextzipcheck_create_settings_page');
+add_action('admin_init', 'nextzipcheck_setup_settings_sections');
+add_action('admin_init', 'nextzipcheck_setup_input_fields');
+
+/// Create settings page
+function nextzipcheck_create_settings_page() {
+    // Add the menu item and page
+    $page_title = 'Zipcheck Settings';
+    $menu_title = 'Zipcheck';
+    $capability = 'manage_options';
+    $slug = 'nextzipcheck_settings';
+    $callback = 'nextzipcheck_create_settings_content';
+
+    add_submenu_page('options-general.php', $page_title, $menu_title, $capability, $slug, $callback);
+}
+
+/// Create everything on the settings page
+function nextzipcheck_create_settings_content(){ ?>
+    <div class="wrap">
+        <h2>Zipcheck Settings</h2>
+        <form method="post" action="options.php">
+            <?php
+                settings_fields('nextzipcheck_settings');
+                do_settings_sections('nextzipcheck_settings');
+                submit_button();
+            ?>
+        </form>
+    </div> 
+<?php }
+
+function nextzipcheck_setup_settings_sections(){
+    add_settings_section('nextzipcheck_api_credentials', 'Nextpertise API credentials', 'nextzipcheck_section_callback', 'nextzipcheck_settings');
+}
+
+function nextzipcheck_section_callback($arguments) {
+    switch( $arguments['id'] ){
+        case 'nextzipcheck_api_credentials':
+            echo 'Input your Nextpertise API Basic Auth username and key.<br>This plugin needs permissions for <i>postcodes</i> and <i>basicbroadband</i>.';
+            break;
+    }
+}
+
+function nextzipcheck_setup_input_fields(){
+    $fields = array(
+        array(
+            'uid' => 'nextzipcheck_username',
+            'label' => 'Username',
+            'section' => 'nextzipcheck_api_credentials',
+            'type' => 'text',
+            'options' => false,
+            'placeholder' => '',
+            'helper' => '',
+            'supplemental' => '',
+            'default' => ''
+        ),
+        array(
+            'uid' => 'nextzipcheck_password',
+            'label' => 'Password',
+            'section' => 'nextzipcheck_api_credentials',
+            'type' => 'password',
+            'options' => false,
+            'placeholder' => '',
+            'helper' => '',
+            'supplemental' => '',
+            'default' => ''
+        ),
+    );
+    foreach( $fields as $field ){
+        add_settings_field($field['uid'], $field['label'], 'nextzipcheck_create_input_fields', 'nextzipcheck_settings', $field['section'], $field);
+        register_setting('nextzipcheck_settings', $field['uid']);
+    }
+}
+
+function nextzipcheck_create_input_fields($arguments){
+    $value = get_option( $arguments['uid'] ); // Get the current value, if there is one
+    if( ! $value ) { // If no value exists
+        $value = $arguments['default']; // Set to our default
+    }
+
+    // Check which type of field we want
+    switch( $arguments['type'] ){
+        case 'text':
+        case 'password':
+            printf( '<input name="%1$s" id="%1$s" type="%2$s" placeholder="%3$s" value="%4$s" />', $arguments['uid'], $arguments['type'], $arguments['placeholder'], $value );
+            break;
+    }
+
+    // If there is help text
+    if( $helper = $arguments['helper'] ){
+        printf( '<span class="helper"> %s</span>', $helper );
+    }
+
+    // If there is supplemental text
+    if( $supplimental = $arguments['supplemental'] ){
+        printf( '<p class="description">%s</p>', $supplimental );
+    }
+}
+
+/// --------------------------------------------------------------------------------------------------------------
+/// ZIPCHECK PLUGIN
+/// --------------------------------------------------------------------------------------------------------------
+
+
 /// Adds plugin JavaScript and CSS to the page
-function nextpostcheck_enqueue_scripts(){
+function nextzipcheck_enqueue_scripts(){
     // CSS
     wp_register_style( 'zipcheck_css', plugin_dir_url(__FILE__).'zipcheck.css');
     wp_enqueue_style('zipcheck_css');
@@ -26,9 +135,7 @@ function nextpostcheck_enqueue_scripts(){
         wp_enqueue_script( 'zipcheck-results_js' );
     }
 }
-add_action( 'wp_enqueue_scripts', 'nextpostcheck_enqueue_scripts' );
-
-
+add_action( 'wp_enqueue_scripts', 'nextzipcheck_enqueue_scripts' );
 
 /// Register AJAX function for both logged in and logged out users.
 add_action( 'wp_ajax_nextzipcheck_get_housenr', 'nextzipcheck_get_housenr' );
@@ -39,6 +146,14 @@ add_action( 'wp_ajax_nextzipcheck_get_all_providers', 'nextzipcheck_get_all_prov
 add_action( 'wp_ajax_nopriv_nextzipcheck_get_all_providers', 'nextzipcheck_get_all_providers' );
 add_action( 'wp_ajax_nextzipcheck_get_available_per_provider', 'nextzipcheck_get_available_per_provider' );
 add_action( 'wp_ajax_nopriv_nextzipcheck_get_available_per_provider', 'nextzipcheck_get_available_per_provider' );
+
+// returns teh HTTP Authorization header. Used in CURLOPT_HTTPHEADER for each request.
+function nextzipcheck_create_auth_header(){
+    $username = get_option('nextzipcheck_username');
+    $password = get_option('nextzipcheck_password');
+    $key = base64_encode($username . ':' . $password);
+    return "Authorization: Basic " . $key;
+}
 
 /// Function that handles ALL api requests.
 /// Returns an array containing the response array and success bool.
@@ -51,7 +166,7 @@ function nextzipcheck_api_request($url, $request_data){
         CURLOPT_CUSTOMREQUEST => "POST",
         CURLOPT_POSTFIELDS => $request_data,
         CURLOPT_HTTPHEADER => array(
-            "Authorization: Basic d3d3LXdlYnNpdGVAbmV4dHBlcnRpc2Uubmw6YVFmN1N2N3FkOFo4VmNuODhNdzlLeXM5dTE3MUhvMjcyRQ==",
+            nextzipcheck_create_auth_header(),
             "Content-Type: application/json",
         ),
     ));
