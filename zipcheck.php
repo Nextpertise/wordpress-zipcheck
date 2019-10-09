@@ -123,16 +123,18 @@ function nextzipcheck_enqueue_scripts(){
     wp_enqueue_style('zipcheck_css');
 
     // JavaScript
-    wp_register_script( 'zipcheck-input_js', plugin_dir_url(__FILE__).'zipcheck-input.js', array('jquery') );
-    wp_localize_script( 'zipcheck-input_js', 'zipcheck_ajax', array( 'ajax_url' => admin_url( 'admin-ajax.php' )));              
-    wp_enqueue_script( 'jquery' );
-    wp_enqueue_script( 'zipcheck-input_js' );
+    wp_register_script('zipcheck-autocomplete_js', plugin_dir_url(__FILE__).'zipcheck-autocomplete.js', array('jquery'));
+    wp_register_script('zipcheck-input_js', plugin_dir_url(__FILE__).'zipcheck-input.js', array('jquery', 'zipcheck-autocomplete_js'));
+    wp_localize_script('zipcheck-input_js', 'zipcheck_ajax', array( 'ajax_url' => admin_url( 'admin-ajax.php' )));              
+    wp_enqueue_script('jquery');
+    wp_enqueue_script('zipcheck-autocomplete_js');
+    wp_enqueue_script('zipcheck-input_js');
 
     // Following scripts only need to be enqueued on results (postcode-check) page.
     if(is_page("postcode-check")){
-        wp_register_script( 'zipcheck-results_js', plugin_dir_url(__FILE__).'zipcheck-results.js', array('jquery') );
-        wp_localize_script( 'zipcheck-results_js', 'zipcheck_ajax', array( 'ajax_url' => admin_url( 'admin-ajax.php' )));  
-        wp_enqueue_script( 'zipcheck-results_js' );
+        wp_register_script('zipcheck-results_js', plugin_dir_url(__FILE__).'zipcheck-results.js', array('jquery') );
+        wp_localize_script('zipcheck-results_js', 'zipcheck_ajax', array( 'ajax_url' => admin_url( 'admin-ajax.php' )));  
+        wp_enqueue_script('zipcheck-results_js');
     }
 }
 add_action( 'wp_enqueue_scripts', 'nextzipcheck_enqueue_scripts' );
@@ -147,7 +149,7 @@ add_action( 'wp_ajax_nopriv_nextzipcheck_get_all_providers', 'nextzipcheck_get_a
 add_action( 'wp_ajax_nextzipcheck_get_available_per_provider', 'nextzipcheck_get_available_per_provider' );
 add_action( 'wp_ajax_nopriv_nextzipcheck_get_available_per_provider', 'nextzipcheck_get_available_per_provider' );
 
-// returns teh HTTP Authorization header. Used in CURLOPT_HTTPHEADER for each request.
+// returns the HTTP Authorization header. Used in CURLOPT_HTTPHEADER for each request.
 function nextzipcheck_create_auth_header(){
     $username = get_option('nextzipcheck_username');
     $password = get_option('nextzipcheck_password');
@@ -219,7 +221,8 @@ function nextzipcheck_get_housenrext(){
     
     if($api_request['success']){
         $result = $api_request['response']->result;
-        $extlist = array_unique(array_merge(["-"], $result->CADASTRAL->housenrexts, $result->KPNWBA->housenrexts, $result->KPNWEAS->housenrexts));
+        // Merges the results, only keeps the unique values, removes the empty value and converts it to a non associative array.
+        $extlist = array_values(array_diff(array_unique(array_merge(["-"], $result->CADASTRAL->housenrexts, $result->KPNWBA->housenrexts, $result->KPNWEAS->housenrexts)), [""]));
         echo json_encode($extlist);
     }
 

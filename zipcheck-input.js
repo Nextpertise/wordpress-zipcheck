@@ -1,6 +1,9 @@
 console.info('Zipcheck input plugin loaded!');
 
+// State vars
 let global_zipcode;
+let global_housenr_zipcode;
+let global_housenr;
 
 const zipcodeRegex = /([1-9][0-9]{3})\s*([a-zA-Z]{2})/;
 const zipcodeStartRegex = /([1-9][0-9]{3})/
@@ -8,16 +11,7 @@ const housenrRegex = /([0-9]+)[^a-zA-Z\n]?([a-zA-Z])*/;
 
 
 jQuery(document).ready(function($) {
-    // Sets the datalist specified by id to the array passed in as newData.
-    function updateDataList(id, newData){
-        let newDataListInnerHtml = "";
-        $.each(newData, function(index, item){
-            newDataListInnerHtml += "<option>" + item + "</option> ";
-        });
-        $("#" + id).html(newDataListInnerHtml);
-    }
-
-    // Gets the housenumber autocomplete/dropdown array and calls updateDataList with the new data.
+    // Gets the housenumber autocomplete/dropdown array and calls callback with the new data.
     // Using callback because normal async/await is not properly supported on all browsers.
     function getAndUpdateHouseNumbers(zipcode, callback){
         $.ajax(zipcheck_ajax.ajax_url, {
@@ -28,7 +22,7 @@ jQuery(document).ready(function($) {
             }
         })
     }
-    // Gets the housenumber extension autocomplete/dropdown array and calls updateDataList with the new data.
+    // Gets the housenumber extension autocomplete/dropdown array and calls callback with the new data.
     // Using callback because normal async/await is not properly supported on all browsers.
     function getAndUpdateExtensions(zipcode, housenr, callback){
         $.ajax(zipcheck_ajax.ajax_url, {
@@ -44,26 +38,28 @@ jQuery(document).ready(function($) {
     function updateHouseNumberCallback(data){
         let input = $('.zipcheck-housenr');
         let inputContainer = input.parent();
-        updateDataList('zipcheck-housenumbers', data);
+        autocomplete($("input.zipcheck-housenr")[0], data);
         inputContainer.removeClass('loader-active');
     }
     function updateExtCallback(data){
         let input = $('.zipcheck-ext');
         let inputContainer = input.parent();
-        updateDataList('zipcheck-extensions', data);
+        autocomplete($("input.zipcheck-ext")[0], data);
         inputContainer.removeClass('loader-active');
     }
 
-    // Adds the loadingbar.
+    // Adds the loadingbar and removes old autocompletes..
     function beforeUpdateHouseNumber(){
-        let input = $('.zipcheck-housenr');
+        let input = $('input.zipcheck-housenr');
         let inputContainer = input.parent();
         inputContainer.addClass('loader-active');
+        autocomplete(input[0], false);
     }
     function beforeUpdateExt(){
-        let input = $('.zipcheck-ext');
+        let input = $('input.zipcheck-ext');
         let inputContainer = input.parent();
         inputContainer.addClass('loader-active');
+        autocomplete(input[0], false);
     }
 
     // Validate input
@@ -79,31 +75,29 @@ jQuery(document).ready(function($) {
         housenr = $.trim(housenr);
     }
 
-    //Add listeners
+    // Add listeners
     $('.zipcheck-zipcode').bind('input', function(event){
         let zipcode = $(this).val().replace(" ", "");
         $(this).val(zipcode);
         if(validateZipcode(zipcode)){
             beforeUpdateHouseNumber();
-            //remove old data
-            updateDataList('zipcheck-housenumbers', "");
-            //get new data
             getAndUpdateHouseNumbers(zipcode, updateHouseNumberCallback);
             global_zipcode = zipcode;
         }
     });
-
     $('.zipcheck-housenr').change(function(){
-        beforeUpdateExt();
-        //remove old data
-        updateDataList('zipcheck-extensions', "");
-
-        //get new data
         let housenr = $(this).val();
-        getAndUpdateExtensions(global_zipcode, housenr, updateExtCallback);
+        if(housenr !== global_housenr || global_zipcode !== global_housenr_zipcode){
+            global_housenr = housenr;
+            global_housenr_zipcode = global_zipcode;
+            beforeUpdateExt();
+            getAndUpdateExtensions(global_zipcode, housenr, updateExtCallback);
+        }
     });
 
-    //Paste support
+
+
+    // Paste support
     function checkAndUsePastedData(paste){
         if(paste.length > 250){return false}
         
