@@ -9,7 +9,7 @@ function autocomplete(inp, arr) {
 
     // Removes autocomplete, adds dash icon, stops functions.
     if(!arr){
-      addDashIcon();
+      removeInputIcons();
       closeAllLists();
       $inp.off(".zipcheckautocomplete");
       return;
@@ -21,6 +21,9 @@ function autocomplete(inp, arr) {
     }
 
     $inp.on("input.zipcheckautocomplete focus.zipcheckautocomplete", function(e) {
+        //Prevent click to close from firing when clicking on this element.
+        // event.stopPropagation();
+
         var a, b, i, val = this.value;
         var dropdownlength = 0;
         closeAllLists();
@@ -40,11 +43,12 @@ function autocomplete(inp, arr) {
 
             b.innerHTML += "<input type='hidden' value='" + arr[i].toString() + "'>";
                 b.addEventListener("click", function(e) {
-                // insert the value for the autocomplete text field:
-                inp.value = this.getElementsByTagName("input")[0].value;
-                $inp.trigger('change');
-                closeAllLists();
-            });
+                  // insert the value for the autocomplete text field:
+                  inp.value = this.getElementsByTagName("input")[0].value;
+                  $inp.trigger('change');
+                  closeAllLists();
+                  currentFocus = -1;
+                });
             a.appendChild(b);
           }
         }
@@ -56,8 +60,14 @@ function autocomplete(inp, arr) {
 
         if (e.keyCode == 40) {
           // On arrow DOWN keypress
-          currentFocus++;
-          addActive(x);
+          if(!(e.target.parentNode.querySelector(".autocomplete-items"))){
+            // If there is no autocomplete open on this input, open it.
+            $inp.trigger('focus');
+          }else{
+            // If there is a autocomplete open, go through list.
+            currentFocus++;
+            addActive(x);
+          }
         } else if (e.keyCode == 38) {
           // On arrow UP keypress
           currentFocus--;
@@ -69,8 +79,8 @@ function autocomplete(inp, arr) {
             // Simulate click on active item
             if (x) x[currentFocus].click();
           }
-        }else if (e.keyCode == 9){
-            // On TAB keypress
+        }else if (e.keyCode == 9 || e.keyCode == 27){
+            // On TAB or ESC keypress
             closeAllLists();
         }
     });
@@ -102,6 +112,11 @@ function autocomplete(inp, arr) {
         i.setAttribute("class", "autocomplete-dropdown-dash");
         inp.parentNode.appendChild(i);
     }
+    function removeInputIcons(){
+      // Removes all icons from the input. Does not have to be called when switching icons.
+      let parent = $(inp.parentNode);
+      parent.find('i').remove();
+    }
 
     function removeActive(x) {
     // A function to remove the "active" class from all autocomplete items:
@@ -111,18 +126,22 @@ function autocomplete(inp, arr) {
     }
 
     function closeAllLists(elem) {
-    // close all autocomplete lists in the document,
-    // except the one passed as an argument:
-      var x = document.getElementsByClassName("autocomplete-items");
-      for (var i = 0; i < x.length; i++) {
-        if (elem != x[i] && elem != inp) {
-            x[i].parentNode.removeChild(x[i]);
+      // close all autocomplete lists in the document,
+      // except the one passed as an argument:
+        var x = document.getElementsByClassName("autocomplete-items");
+        for (var i = 0; i < x.length; i++) {
+          if (elem != x[i] && elem != inp) {
+              x[i].parentNode.removeChild(x[i]);
+          }
         }
       }
-    }
 
     document.addEventListener("click", function (e) {
-      closeAllLists(e.target);
+      if((e.target.parentNode.querySelector(".autocomplete-items"))){
+        closeAllLists((e.target.parentNode.querySelector(".autocomplete-items")))
+      }else{
+        closeAllLists(e.target);
+      }
     });
 
     // Open list if loading finishes after input already in focus.
