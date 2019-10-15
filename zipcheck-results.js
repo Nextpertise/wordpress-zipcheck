@@ -221,12 +221,17 @@ jQuery(document).ready(function($) {
       }
 
       // Sets the inputs to the inputs submitted.
-      function populateInputs(params){
-        $(".zipcheck-zipcode").val(params['zipcheck-zipcode']);
-        $(".zipcheck-housenr").val(params['zipcheck-housenr']);
-        $(".zipcheck-ext").val(params['zipcheck-ext']);
+      function populateState(params){
+        global_zipcode = params['zipcheck-zipcode'];
+        global_housenr_zipcode = global_zipcode;
+        global_housenr = params['zipcheck-housenr'];
+
+        $(".results .zipcheck-zipcode").val(global_zipcode);
+        $(".results .zipcheck-housenr").val(global_housenr);
+        $(".results .zipcheck-ext").val(params['zipcheck-ext']);
       }
 
+
       listProviders(getAndInsertDataFromProviders);
-      populateInputs(getParameters());
+      populateState(getParameters());
 });

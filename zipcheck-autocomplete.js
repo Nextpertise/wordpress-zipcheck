@@ -10,7 +10,7 @@ function autocomplete(inp, arr) {
     // Removes autocomplete, adds dash icon, stops functions.
     if(!arr){
       removeInputIcons();
-      closeAllLists();
+      closeInputList($inp);
       $inp.off(".zipcheckautocomplete");
       return;
     }
@@ -21,12 +21,9 @@ function autocomplete(inp, arr) {
     }
 
     $inp.on("input.zipcheckautocomplete focus.zipcheckautocomplete", function(e) {
-        //Prevent click to close from firing when clicking on this element.
-        // event.stopPropagation();
-
+        closeInputList($inp);
         var a, b, i, val = this.value;
         var dropdownlength = 0;
-        closeAllLists();
         currentFocus = -1;
         // create a DIV element that will contain the items (values):
         a = document.createElement("DIV");
@@ -127,7 +124,7 @@ function autocomplete(inp, arr) {
 
     function closeAllLists(elem) {
       // close all autocomplete lists in the document,
-      // except the one passed as an argument:
+      // except the one passed as an argument.
         var x = document.getElementsByClassName("autocomplete-items");
         for (var i = 0; i < x.length; i++) {
           if (elem != x[i] && elem != inp) {
@@ -135,6 +132,11 @@ function autocomplete(inp, arr) {
           }
         }
       }
+
+    function closeInputList($input) {
+      // closes the list of the input passed in as an argument.
+      $input.siblings('.autocomplete-items').remove();
+    }
 
     document.addEventListener("click", function (e) {
       if((e.target.parentNode.querySelector(".autocomplete-items"))){

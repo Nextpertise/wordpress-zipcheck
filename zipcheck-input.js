@@ -4,6 +4,7 @@ console.info('Zipcheck input plugin loaded!');
 let global_zipcode;
 let global_housenr_zipcode;
 let global_housenr;
+let zipcheck_housenr_input_timeout;
 
 const zipcodeRegex = /([1-9][0-9]{3})\s*([a-zA-Z]{2})/;
 const zipcodeStartRegex = /([1-9][0-9]{3})/
@@ -25,6 +26,7 @@ jQuery(document).ready(function($) {
     // Gets the housenumber extension autocomplete/dropdown array and calls callback with the new data.
     // Using callback because normal async/await is not properly supported on all browsers.
     function getAndUpdateExtensions(zipcode, housenr, callback){
+        console.log(global_housenr);
         $.ajax(zipcheck_ajax.ajax_url, {
             method: 'POST',
             data: {'action': 'nextzipcheck_get_housenrext', 'zipcode': zipcode, 'housenr': housenr},
@@ -38,13 +40,17 @@ jQuery(document).ready(function($) {
     function updateHouseNumberCallback(data){
         let input = $('.zipcheck-housenr');
         let inputContainer = input.parent();
-        autocomplete($("input.zipcheck-housenr")[0], data);
+        $("input.zipcheck-housenr").each(function(i){
+            autocomplete(this, data);
+        });
         inputContainer.removeClass('loader-active');
     }
     function updateExtCallback(data){
         let input = $('.zipcheck-ext');
         let inputContainer = input.parent();
-        autocomplete($("input.zipcheck-ext")[0], data);
+        $("input.zipcheck-ext").each(function(i){
+            autocomplete(this, data);
+        })
         inputContainer.removeClass('loader-active');
     }
 
@@ -83,11 +89,28 @@ jQuery(document).ready(function($) {
             beforeUpdateHouseNumber();
             getAndUpdateHouseNumbers(zipcode, updateHouseNumberCallback);
             global_zipcode = zipcode;
+            if(global_housenr){
+                // If zipcode is changed while a housenumber was already supplied, trigger housenr update.
+                $('.zipcheck-housenr').trigger('change');
+            }
+        }
+    });
+    $('.zipcheck-housenr').bind('input', function(event){
+        // If no input changes in 300ms, fire change event and get extensions for housenr.
+        if(zipcheck_housenr_input_timeout){
+            // Cancel timeout since there has been a change
+            clearTimeout(zipcheck_housenr_input_timeout);
+        }
+        if($(this).val()){
+            // Don't set timeout if input is empty.
+            zipcheck_housenr_input_timeout = setTimeout(function(){
+                $('.zipcheck-housenr').trigger('change');
+            }, 300)
         }
     });
     $('.zipcheck-housenr').change(function(){
         let housenr = $(this).val();
-        if(housenr !== global_housenr || global_zipcode !== global_housenr_zipcode){
+        if((housenr != global_housenr || global_zipcode != global_housenr_zipcode) && global_zipcode){
             global_housenr = housenr;
             global_housenr_zipcode = global_zipcode;
             beforeUpdateExt();
