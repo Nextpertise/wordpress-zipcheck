@@ -150,7 +150,7 @@ function nextzipcheck_enqueue_scripts(){
     // JavaScript
     wp_register_script('zipcheck-autocomplete_js', plugin_dir_url(__FILE__).'zipcheck-autocomplete.js', array('jquery'));
     wp_register_script('zipcheck-input_js', plugin_dir_url(__FILE__).'zipcheck-input.js', array('jquery', 'zipcheck-autocomplete_js'));
-    wp_localize_script('zipcheck-input_js', 'zipcheck_ajax', array( 'ajax_url' => admin_url( 'admin-ajax.php' )));              
+    wp_localize_script('zipcheck-input_js', 'zipcheck_ajax', array('ajax_url'=>admin_url('admin-ajax.php'), 'results_url'=>get_page_link(get_page_by_title(get_option('nextzipcheck_results_page')))));              
     wp_enqueue_script('jquery');
     wp_enqueue_script('zipcheck-autocomplete_js');
     wp_enqueue_script('zipcheck-input_js');

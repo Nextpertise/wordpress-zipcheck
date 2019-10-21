@@ -11,7 +11,10 @@ const zipcodeStartRegex = /([1-9][0-9]{3})/
 const housenrRegex = /([0-9]+)[^a-zA-Z\n]?([a-zA-Z])*/;
 
 
+
 jQuery(document).ready(function($) {
+    $('form.zipcode-form').attr('action', zipcheck_ajax.results_url);
+
     // Gets the housenumber autocomplete/dropdown array and calls callback with the new data.
     // Using callback because normal async/await is not properly supported on all browsers.
     function getAndUpdateHouseNumbers(zipcode, callback){
