@@ -53,6 +53,9 @@ function nextzipcheck_section_callback($arguments) {
         case 'nextzipcheck_api_credentials':
             echo 'Input your Nextpertise API Basic Auth username and key.<br>This plugin needs permissions for <i>postcodes</i> and <i>basicbroadband</i>.';
             break;
+        case 'nextzipcheck_results_settings':
+            echo 'These settings will affect your results page.';
+            break;
     }
 }
 
@@ -80,6 +83,17 @@ function nextzipcheck_setup_input_fields(){
             'supplemental' => '',
             'default' => ''
         ),
+        array(
+            'uid' => 'nextzipcheck_results_page',
+            'label' => 'Page',
+            'section' => 'nextzipcheck_results_settings',
+            'type' => 'text-datalist',
+            'options' => false,
+            'placeholder' => '',
+            'helper' => '',
+            'supplemental' => '',
+            'default' => ''
+        ),
     );
     foreach( $fields as $field ){
         add_settings_field($field['uid'], $field['label'], 'nextzipcheck_create_input_fields', 'nextzipcheck_settings', $field['section'], $field);
@@ -97,7 +111,17 @@ function nextzipcheck_create_input_fields($arguments){
     switch( $arguments['type'] ){
         case 'text':
         case 'password':
-            printf( '<input name="%1$s" id="%1$s" type="%2$s" placeholder="%3$s" value="%4$s" />', $arguments['uid'], $arguments['type'], $arguments['placeholder'], $value );
+            printf('<input name="%1$s" id="%1$s" type="%2$s" placeholder="%3$s" value="%4$s" />', $arguments['uid'], $arguments['type'], $arguments['placeholder'], $value );
+            break;
+        case 'text-datalist':
+            printf('<input name="%1$s" id="%1$s" list="%1$s-datalist" type="%2$s" placeholder="%3$s" value="%4$s" />', $arguments['uid'], $arguments['type'], $arguments['placeholder'], $value );
+            printf('<datalist id="%1$s-datalist">', $arguments['uid']);
+            if($pages = get_pages()){
+                foreach($pages as $page){
+                    echo '<option value="' . $page->post_title . '" ' . selected( $page->post_title, $options['post_title'] ) . '>' . $page->ID . '</option>';
+                }
+            }
+            printf('</datalist>');
             break;
     }
 
@@ -132,7 +156,7 @@ function nextzipcheck_enqueue_scripts(){
     wp_enqueue_script('zipcheck-input_js');
 
     // Following scripts only need to be enqueued on results (postcode-check) page.
-    if(is_page("postcode-check")){
+    if(is_page(get_option('nextzipcheck_results_page'))){
         wp_register_script('zipcheck-results_js', plugin_dir_url(__FILE__).'zipcheck-results.js', array('jquery') );
         wp_localize_script('zipcheck-results_js', 'zipcheck_ajax', array( 'ajax_url' => admin_url( 'admin-ajax.php' )));  
         wp_enqueue_script('zipcheck-results_js');
@@ -245,7 +269,6 @@ function nextzipcheck_get_all_providers(){
         $result = $api_request['response']->result;
         echo json_encode($result->providers);
     }
-
     wp_die();
 }
 

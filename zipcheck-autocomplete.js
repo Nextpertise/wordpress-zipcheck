@@ -169,9 +169,5 @@ function getAutocompleteFromSessionCache(data, inp){
     return false;
   }
   let saved = sessionStorage.getItem(itemKey);
-  console.log(saved);
-  console.log(data);
-  console.log(inp);
-  console.log('-----------------------------------------------');
   return saved ? JSON.parse(saved) : false;
 }
