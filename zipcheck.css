@@ -47,12 +47,7 @@
   border-top: 7px solid #00a2d7;
 }
 
-
-/* Linear in input loader */
-#zipcheck-housenr{
-    transition: color 0.25s;
-}
-.row > .form-grp.loader-active::before, .row > .form-grp.loader-active::after{
+.zipcode-form .form-grp.loader-active::before, .row > .form-grp.loader-active::after{
     box-sizing: inherit;
     content: '';
     position: absolute;
@@ -61,11 +56,11 @@
     left: 15px;
 }
 
-.row > .form-grp.loader-active::before{
+.zipcode-form .form-grp.loader-active::before{
     border-top: 2px solid #0070ba;
     animation: zipcheck_loader 2s ease-in-out infinite;
 }
-.row > .form-grp.loader-active::after{
+.zipcode-form .form-grp.loader-active::after{
     border-top: 2px solid #d3e7f3;
     animation: zipcheck_loader 2s ease 0.4s infinite;
 }
