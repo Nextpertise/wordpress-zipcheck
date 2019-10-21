@@ -1,7 +1,7 @@
 # Nextpertise Zipcheck Wordpress Plugin
 
 ## Installation
-You can download a ZIP version of the plugin **here**. This ZIP can be uploaded to your WordPress installation (WP Admin -> Plugins -> Add New -> Upload Plugin). After installing the plugin, don't forget to enable it on the plugins page!
+You can download a ZIP version of the plugin [here](https://github.com/Nextpertise/wordpress-zipcheck/archive/master.zip). This ZIP can be uploaded to your WordPress installation (WP Admin -> Plugins -> Add New -> Upload Plugin). After installing the plugin, don't forget to enable it on the plugins page!
 
 ## Requirements
 This plugin adds a lot of capabilities to a form, but, for customizability, it doesn't add the form itself. In order for the plugin to work correctly, your HTML needs to follow some requirements:
