@@ -14,7 +14,6 @@ function autocomplete(inp, arr) {
       $inp.off(".zipcheckautocomplete");
       return;
     }
-
     // Adds the dropdown icon if there are dropdown options.
     if(arr.length > 0){
       addDropdownIcon();
@@ -102,13 +101,6 @@ function autocomplete(inp, arr) {
         }
         inp.parentNode.appendChild(i);
     }
-    function addDashIcon(){
-        let parent = $(inp.parentNode);
-        parent.find('i').remove();        
-        var i = document.createElement("I");
-        i.setAttribute("class", "autocomplete-dropdown-dash");
-        inp.parentNode.appendChild(i);
-    }
     function removeInputIcons(){
       // Removes all icons from the input. Does not have to be called when switching icons.
       let parent = $(inp.parentNode);
@@ -151,3 +143,35 @@ function autocomplete(inp, arr) {
         $inp.trigger('focus');
     }
   }
+
+//Save AJAX autocomplete to session.
+function saveAutocompleteToSessionCache(data){
+  if(data['ext']){
+    // Save extensions
+    let itemKey = "ext-" + data['housenr'] + data['zipcode'];
+    sessionStorage.setItem(itemKey, JSON.stringify(data['ext']));
+  }else{
+    // Save housnr
+    let itemKey = "housenr-" + data['zipcode'];
+    sessionStorage.setItem(itemKey, JSON.stringify(data['housenr']));
+  }
+}
+
+function getAutocompleteFromSessionCache(data, inp){
+  let itemKey;
+  if(inp === "ext" && data['housenr']){
+    // Get extensions
+    itemKey = "ext-" + data['housenr'] + data['zipcode'];
+  }else if(inp === "housenr"){
+    // Get housenr
+    itemKey = "housenr-" + data['zipcode'];
+  }else{
+    return false;
+  }
+  let saved = sessionStorage.getItem(itemKey);
+  console.log(saved);
+  console.log(data);
+  console.log(inp);
+  console.log('-----------------------------------------------');
+  return saved ? JSON.parse(saved) : false;
+}

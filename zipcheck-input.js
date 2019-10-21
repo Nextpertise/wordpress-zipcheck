@@ -15,10 +15,16 @@ jQuery(document).ready(function($) {
     // Gets the housenumber autocomplete/dropdown array and calls callback with the new data.
     // Using callback because normal async/await is not properly supported on all browsers.
     function getAndUpdateHouseNumbers(zipcode, callback){
+        let autocompleteCache = getAutocompleteFromSessionCache({'zipcode': zipcode}, 'housenr');
+        if(autocompleteCache){
+            callback(autocompleteCache);
+            return;
+        }
         $.ajax(zipcheck_ajax.ajax_url, {
             method: 'POST',
             data: {'action': 'nextzipcheck_get_housenr', 'zipcode': zipcode},
             success: function(data){
+                saveAutocompleteToSessionCache({'zipcode': zipcode, 'housenr': JSON.parse(data)});
                 callback(JSON.parse(data));
             }
         })
@@ -26,11 +32,17 @@ jQuery(document).ready(function($) {
     // Gets the housenumber extension autocomplete/dropdown array and calls callback with the new data.
     // Using callback because normal async/await is not properly supported on all browsers.
     function getAndUpdateExtensions(zipcode, housenr, callback){
-        console.log(global_housenr);
+        if(!housenr){return;}
+        let autocompleteCache = getAutocompleteFromSessionCache({'zipcode': zipcode, 'housenr': housenr}, 'ext');
+        if(autocompleteCache){
+            callback(autocompleteCache);
+            return;
+        }
         $.ajax(zipcheck_ajax.ajax_url, {
             method: 'POST',
             data: {'action': 'nextzipcheck_get_housenrext', 'zipcode': zipcode, 'housenr': housenr},
             success: function(data){
+                saveAutocompleteToSessionCache({'zipcode': zipcode, 'housenr': housenr, 'ext': JSON.parse(data)});
                 callback(JSON.parse(data));
             }
         })
@@ -155,6 +167,17 @@ jQuery(document).ready(function($) {
         if(checkAndUsePastedData(pastedData)){
             event.preventDefault();
         };
+    });
+
+    // Init autocomplete
+    function autocompleteInit(){
+        $('.zipcheck-zipcode').trigger('input');
+        $('.zipcheck-housenr').trigger('change');
+    }
+
+    $(document).on('zipcheck-results-init', function(){
+        autocompleteInit();
+        $(document).off('zipcheck-results-init');
     });
 
 });

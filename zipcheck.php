@@ -45,6 +45,7 @@ function nextzipcheck_create_settings_content(){ ?>
 
 function nextzipcheck_setup_settings_sections(){
     add_settings_section('nextzipcheck_api_credentials', 'Nextpertise API credentials', 'nextzipcheck_section_callback', 'nextzipcheck_settings');
+    add_settings_section('nextzipcheck_results_settings', 'Results settings', 'nextzipcheck_section_callback', 'nextzipcheck_settings');
 }
 
 function nextzipcheck_section_callback($arguments) {

@@ -229,9 +229,12 @@ jQuery(document).ready(function($) {
         $(".results .zipcheck-zipcode").val(global_zipcode);
         $(".results .zipcheck-housenr").val(global_housenr);
         $(".results .zipcheck-ext").val(params['zipcheck-ext']);
+        
+        $(document).trigger("zipcheck-results-init");
       }
 
 
       listProviders(getAndInsertDataFromProviders);
       populateState(getParameters());
+
 });
