@@ -1,5 +1,3 @@
-console.info('Zipcheck results plugin loaded!');
-
 const HARDCODED_MAPPINGS = {
   22000: '22 mb',
   50000: '50 mb',

@@ -1,4 +1,3 @@
-console.info('Zipcheck autocomplete plugin loaded!');
 const MAXDROPDOWNLENGTH = 100;
 
 function autocomplete(inp, arr) {

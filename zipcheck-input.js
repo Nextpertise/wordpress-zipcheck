@@ -1,5 +1,3 @@
-console.info('Zipcheck input plugin loaded!');
-
 // State vars
 let global_zipcode;
 let global_housenr_zipcode;
@@ -9,7 +7,6 @@ let zipcheck_housenr_input_timeout;
 const zipcodeRegex = /([1-9][0-9]{3})\s*([a-zA-Z]{2})/;
 const zipcodeStartRegex = /([1-9][0-9]{3})/
 const housenrRegex = /([0-9]+)[^a-zA-Z\n]?([a-zA-Z])*/;
-
 
 
 jQuery(document).ready(function($) {
