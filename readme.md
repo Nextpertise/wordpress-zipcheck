@@ -27,7 +27,7 @@ You can add your own CSS to the form directly, or via extra classes. The results
  * `postcode-left-part`
  * `postcode-right-part`
 
-## Example Form HTML
+## Example HTML Form
 ```
 <form class="zipcode-form" autocomplete="off" action="postcode-check/">
    <div class="row">
