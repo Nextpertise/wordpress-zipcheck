@@ -15,15 +15,42 @@ This plugin adds a lot of capabilities to a form, but, for customizability, it d
  * Every input needs to have a parent `<div class="form-grp">` of which the input is the only child. The `div` is used to append the autocomplete & dropdown icon.  
  * On your results page, there needs to be a `<div class="postcode-result">`. All the results will be appended to this box. Results will automatically be ordered in the correct way.
 
- ## Configuration
- * Input your Nextpertise API Basic Auth credentials on the plugin settings page (WP Admin -> Settings -> Zipcheck).
- * Specify the results page on the plugin settings page. You should input the WordPress title of the page. There is an autocomplete dropdown that will help you.
+## Configuration
+* Input your Nextpertise API Basic Auth credentials on the plugin settings page (WP Admin -> Settings -> Zipcheck).
+* Specify the results page on the plugin settings page. You should input the WordPress title of the page. There is an autocomplete dropdown that will help you.
 
- ## Customizing
- You can add your own CSS to the form directly, or via extra classes. The results can be customized by editing the following classes:
-  * `postcode-result`
-  * `postcode-result-box`
-  * `result-item`
-  * `postcode-left-part`
-  * `postcode-right-part`
+## Customizing
+You can add your own CSS to the form directly, or via extra classes. The results can be customized by editing the following classes:
+ * `postcode-result`
+ * `postcode-result-box`
+ * `result-item`
+ * `postcode-left-part`
+ * `postcode-right-part`
+
+## Example Form HTML
+```
+<form class="zipcode-form" autocomplete="off" action="postcode-check/">
+   <div class="row">
+
+      <!-- Zipcode input -->
+      <div class="form-grp">
+         <input name="zipcheck-zipcode" type="text" class="input-grp zipcheck-zipcode" placeholder="Postcode" required>
+      </div>
+
+      <!-- Housenumber input with dropdownlist  -->
+      <div class="form-grp">
+         <input name="zipcheck-housenr" type="text" class="input-grp zipcheck-housenr" placeholder="Huisnummer" required>
+      </div>
+
+      <!-- Housenumber extenstion with dropdownlist -->
+      <div class="form-grp">
+         <input name="zipcheck-ext" type="text" class="input-grp zipcheck-ext"  placeholder="Toevoeging">
+      </div>
+
+      <!-- Submit button -->
+      <button type="submit">Zoek</button>
+
+   </div>
+</form>
+  ```
    
