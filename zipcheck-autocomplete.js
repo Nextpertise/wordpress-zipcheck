@@ -145,7 +145,7 @@ function autocomplete(inp, arr) {
 
 //Save AJAX autocomplete to session.
 function saveAutocompleteToSessionCache(data){
-  if(data['ext']){
+  if(data['ext'] !== undefined){
     // Save extensions
     let itemKey = "ext-" + data['housenr'] + data['zipcode'];
     sessionStorage.setItem(itemKey, JSON.stringify(data['ext']));
