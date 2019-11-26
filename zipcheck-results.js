@@ -111,10 +111,10 @@ jQuery(document).ready(function($) {
 
       // Adds the address to the header.
       function updateHeaderContent(address){
-        let subtitle = "<h5>Beschikbare producten op</h5>";
-        let title = "<h1>" + address["street"] + " " + address['housenr'].toString() + address['housenrext'] + " in " + address['municipality'] + "</h1>";
+        let subtitle = "<p>Beschikbare producten op</p>";
+        let title = "<h2>" + address["street"] + " " + address['housenr'].toString() + address['housenrext'] + " in " + address['municipality'] + "</h2>";
 
-        $(".banner-content").html(subtitle + title);
+        $(".postcode-text-part").html(subtitle + title);
 
       }
     
@@ -190,7 +190,7 @@ jQuery(document).ready(function($) {
 
       // Create the HTML within JavaScript. Using normal `+` instead of template literals for IE 11 support.  
       function createResultBox(result){
-        let title = "<h2>" + result['header'].replace('Fiber', 'Glasvezel') + "</h2>";
+        let title = "<h3>" + result['header'].replace('Fiber', 'Glasvezel') + "</h3>";
         let subtitle = "<p> via " + result['provider'] + "</p>";
         let speedup = '<h3><img src="http://new.nextpertise.nl/wp-content/uploads/2018/10/arrow-up.svg" alt="down">' + createSpeedDisplayValue(result['max_upload']) + '</h3>';
         let speeddown = '<h3><img src="http://new.nextpertise.nl/wp-content/uploads/2018/10/arrow-down.svg" alt="down">' + createSpeedDisplayValue(result['max_download']) + '</h3>';
