@@ -120,3 +120,8 @@
     stroke-dashoffset: -124;
   }
 }
+
+/* Transform input to uppercase */
+form.zipcode-form input:not(:placeholder-shown)[type="text"]{
+  text-transform: uppercase;
+}
