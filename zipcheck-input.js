@@ -1,6 +1,6 @@
 // State vars
 let global_zipcode;
-let global_previous_zipcode = "";
+let global_previous_zipcode_input = "";
 let global_housenr_zipcode;
 let global_housenr;
 let zipcheck_housenr_input_timeout;
@@ -107,11 +107,11 @@ jQuery(document).ready(function($) {
                 $('.zipcheck-housenr').trigger('change');
             }
         }
-        if(zipcode === "" && global_previous_zipcode !== ""){
+        if(zipcode !== global_previous_zipcode_input && global_previous_zipcode_input !== ""){
             $('input.zipcheck-housenr').val("");
             $('input.zipcheck-ext').val("");
         }
-        global_previous_zipcode = zipcode;
+        global_previous_zipcode_input = zipcode;
     });
     $('.zipcheck-housenr').bind('input', function(event){
         // If no input changes in 300ms, fire change event and get extensions for housenr.

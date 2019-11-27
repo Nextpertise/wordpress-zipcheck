@@ -151,6 +151,7 @@ jQuery(document).ready(function($) {
       // Gets data for each provider, loops over the data, adds data to resultlist, calls the sort and render functions.
       function getAndInsertDataFromProviders(providerList){
         let params = getParameters();
+        params['zipcheck-ext'] = params['zipcheck-ext'] !== "undefined" ? params['zipcheck-ext'] : ""
         necessaryProviderCalls = providerList.length;
 
         $.each(providerList, function(index, val){
@@ -218,6 +219,8 @@ jQuery(document).ready(function($) {
 
       // Sets the inputs to the inputs submitted.
       function populateState(params){
+        params['zipcheck-ext'] = params['zipcheck-ext'] !== "undefined" ? params['zipcheck-ext'] : ""
+
         global_zipcode = params['zipcheck-zipcode'];
         global_housenr_zipcode = global_zipcode;
         global_housenr = params['zipcheck-housenr'];
