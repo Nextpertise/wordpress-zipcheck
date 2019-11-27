@@ -1,5 +1,6 @@
 // State vars
 let global_zipcode;
+let global_previous_zipcode = "";
 let global_housenr_zipcode;
 let global_housenr;
 let zipcheck_housenr_input_timeout;
@@ -106,6 +107,11 @@ jQuery(document).ready(function($) {
                 $('.zipcheck-housenr').trigger('change');
             }
         }
+        if(zipcode === "" && global_previous_zipcode !== ""){
+            $('input.zipcheck-housenr').val("");
+            $('input.zipcheck-ext').val("");
+        }
+        global_previous_zipcode = zipcode;
     });
     $('.zipcheck-housenr').bind('input', function(event){
         // If no input changes in 300ms, fire change event and get extensions for housenr.
