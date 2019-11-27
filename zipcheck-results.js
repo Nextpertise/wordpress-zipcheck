@@ -195,7 +195,7 @@ jQuery(document).ready(function($) {
         let speedup = '<h3><img src="http://new.nextpertise.nl/wp-content/uploads/2018/10/arrow-up.svg" alt="down">' + createSpeedDisplayValue(result['max_upload']) + '</h3>';
         let speeddown = '<h3><img src="http://new.nextpertise.nl/wp-content/uploads/2018/10/arrow-down.svg" alt="down">' + createSpeedDisplayValue(result['max_download']) + '</h3>';
         let shouldAddDivider = (result['area'] !== undefined && result['area'] != "" && result['distance'] !== undefined && result['distance'] != "")
-        let area = "<p>" + result['area'] + (shouldAddDivider ? ", " : "") + result['distance'].replace(";", ", ") + "</p>";
+        let area =  result['area'] + (shouldAddDivider ? ", " : "") + result['distance'].replace(";", ", ");
         let smallSubText = (result['carrier'].toUpperCase() === "COPPER" && result['provider'].toUpperCase() === "KPNWBA") ? "Verwachte snelheid" : "";
 
         let html = '\
@@ -205,11 +205,9 @@ jQuery(document).ready(function($) {
             </div>\
             <div class="postcode-right-part">\
               <div class="speed-part">\
-              <p class="light-text">' + smallSubText + '</p>\
               ' + speeddown + speedup + '\
-                <p></p>\
               </div>\
-              ' + area + '\
+              <p>' + area + smallSubText + '</p>\
             </div>\
             <p><p>\
           </div>\
