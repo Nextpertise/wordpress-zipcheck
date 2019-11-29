@@ -193,8 +193,8 @@ jQuery(document).ready(function($) {
       function createResultBox(result){
         let title = "<h3>" + result['header'].replace('Fiber', 'Glasvezel') + "</h3>";
         let subtitle = "<p> via " + result['provider'] + "</p>";
-        let speedup = '<h3><img src="http://new.nextpertise.nl/wp-content/uploads/2018/10/arrow-up.svg" alt="down">' + createSpeedDisplayValue(result['max_upload']) + '</h3>';
-        let speeddown = '<h3><img src="http://new.nextpertise.nl/wp-content/uploads/2018/10/arrow-down.svg" alt="down">' + createSpeedDisplayValue(result['max_download']) + '</h3>';
+        let speedup = '<h3><img src="https://nextpertise.nl/wp-content/uploads/2018/10/arrow-up.svg" alt="down">' + createSpeedDisplayValue(result['max_upload']) + '</h3>';
+        let speeddown = '<h3><img src="https://nextpertise.nl/wp-content/uploads/2018/10/arrow-down.svg" alt="down">' + createSpeedDisplayValue(result['max_download']) + '</h3>';
         let shouldAddDivider = (result['area'] !== undefined && result['area'] != "" && result['distance'] !== undefined && result['distance'] != "")
         let area =  result['area'] + (shouldAddDivider ? ", " : "") + result['distance'].replace(";", ", ");
         let smallSubText = (result['carrier'].toUpperCase() === "COPPER" && result['provider'].toUpperCase() === "KPNWBA") ? "Verwachte snelheid" : "";
