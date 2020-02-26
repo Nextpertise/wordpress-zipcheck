@@ -260,11 +260,11 @@ function nextzipcheck_get_all_providers(){
         "jsonrpc" => "2.0",
         "id" => 1,
         "method" => "list_providers",
-        "params" => array()
+        "params" => json_decode ("{}")
     ));
 
-    $api_request = nextzipcheck_api_request("https://api.nextpertise.nl/broadband/v1", $request_data);
-
+    $api_request = nextzipcheck_api_request("https://api.nextpertise.nl/broadband/v1/", $request_data);
+    
     if($api_request['success']){
         $result = $api_request['response']->result;
         echo json_encode($result->providers);

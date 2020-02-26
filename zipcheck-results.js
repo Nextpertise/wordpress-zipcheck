@@ -1,8 +1,8 @@
 const HARDCODED_MAPPINGS = {
-  22000: '22 mb',
-  50000: '50 mb',
-  512000: '500 mb',
-  524000: '500 mb',
+  22000: '22 Mb',
+  50000: '50 Mb',
+  512000: '500 Mb',
+  524000: '500 Mb',
 };
 
 const SORT_LIST = ["KPNWBAFIBER", "KPNWBAFTTH/FTTO", "KPNWBAVPLUS", "KPNWBAVVDSL", "KPNWBAVDSL", "KPNWBAADSL", "KPNWBABVDSL", 
@@ -21,22 +21,22 @@ function createSpeedDisplayValue(_value) {
       return HARDCODED_MAPPINGS[value];
   }
   if (isLessThanAMb) {
-      return `${value} kb`;
+      return `${value} Kb`;
   }
   if (isLessThan3Mb) {
       const mbValue = parseFloat((value / 1024).toFixed(2));
-      return `${mbValue} mb`;
+      return `${mbValue} Mb`;
   }
   if (isGreaterThan95Mb) {
       const mbValue = Math.round(value / 1024);
       const roundedMbValue = Math.ceil(mbValue / 10) * 10;
 
-      return `${roundedMbValue} mb`;
+      return `${roundedMbValue} Mb`;
   }
   if (isLessThan1Gb) {
-      return `${Math.round(value / 1024)} mb`;
+      return `${Math.round(value / 1024)} Mb`;
   }
-  return `${Math.round(value / 1024 / 1024)} gb`;
+  return `${Math.round(value / 1024 / 1024)} Gb`;
 }
 
 jQuery(document).ready(function($) {
