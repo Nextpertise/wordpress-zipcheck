@@ -5,8 +5,8 @@
   z-index: 99;
   /*position the autocomplete items to be the same width as the container:*/
   top: 100%;
-  left: 15px;
-  right: 15px;
+  left: 0;
+  right: 0;
 }
 .autocomplete-items div {
   padding: 10px;
@@ -124,4 +124,17 @@
 /* Transform input to uppercase */
 form.zipcode-form input:not(:placeholder-shown)[type="text"]{
   text-transform: uppercase;
+}
+
+form.zipcode-form input[type="text"]{
+  height: 60px;
+  border-top: 2px solid #d3e7f3; 
+  font-size: 20px; 
+  color: #4b4b49; 
+  background-color: #fff;
+  width: 100%;
+}
+
+form.zipcode-form .form-grp{
+  position: relative;
 }

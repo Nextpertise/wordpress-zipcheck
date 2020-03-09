@@ -1,7 +1,7 @@
 const MAXDROPDOWNLENGTH = 100;
+if($ == undefined){let $ = jQuery;}  
 
 function autocomplete(inp, arr) {
-    if($ == undefined){let $ = jQuery;}  
 
     // the autocomplete function takes two arguments,
     // the text field element and an array of possible autocompleted values:

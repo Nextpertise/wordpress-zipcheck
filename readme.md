@@ -14,6 +14,7 @@ This plugin adds a lot of capabilities to a form, but, for customizability, it d
     - `<input type="text" class="zipcheck-ext">`
  * Every input needs to have a parent `<div class="form-grp">` of which the input is the only child. The `div` is used to append the autocomplete & dropdown icon.  
  * On your results page, there needs to be a `<div class="postcode-result">`. All the results will be appended to this box. Results will automatically be ordered in the correct way.
+ * On your results page, you can add a loader (spinning circle, wait message, etc.) with classes `postcode-result-box` and `spinner-box`. This loader will automatically be hidden when results are loaded. 
 
 ## Configuration
 * Input your Nextpertise API Basic Auth credentials on the plugin settings page (WP Admin -> Settings -> Zipcheck).
