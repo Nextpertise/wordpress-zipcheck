@@ -112,7 +112,8 @@ jQuery(document).ready(function($) {
       // Adds the address to the header.
       function updateHeaderContent(address){
         let subtitle = "<p>Beschikbare producten op</p>";
-        let title = "<h2>" + address["street"] + " " + address['housenr'].toString() + address['housenrext'] + " in " + address['municipality'] + "</h2>";
+        let title_housenrext = address['housenrext'] === "" ? "" : "-" + address['housenrext'];
+        let title = "<h2>" + address["street"] + " " + address['housenr'].toString() + title_housenrext + " in " + address['municipality'] + "</h2>";
 
         $(".postcode-text-part").html(subtitle + title);
 
