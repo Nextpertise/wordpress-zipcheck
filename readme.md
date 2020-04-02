@@ -14,7 +14,10 @@ This plugin adds a lot of capabilities to a form, but, for customizability, it d
     - `<input type="text" class="zipcheck-ext">`
  * Every input needs to have a parent `<div class="form-grp">` of which the input is the only child. The `div` is used to append the autocomplete & dropdown icon.  
  * On your results page, there needs to be a `<div class="postcode-result">`. All the results will be appended to this box. Results will automatically be ordered in the correct way.
- * On your results page, you can add a loader (spinning circle, wait message, etc.) with classes `postcode-result-box` and `spinner-box`. This loader will automatically be hidden when results are loaded. 
+
+## Optional features
+ * On your results page, you can add a loader (spinning circle, wait message, etc.) with classes `postcode-result-box` and `spinner-box`. This loader will automatically be hidden when results are loaded.
+ * On your results page, you can add a container with class `.postcode-text-part`. When there is at least one result, this container will contain a `h2` element with the adress and a `p` element with extra info. If there are no results, this container will contain a `h2` element with an error.
 
 ## Configuration
 * Input your Nextpertise API Basic Auth credentials on the plugin settings page (WP Admin -> Settings -> Zipcheck).
@@ -23,10 +26,11 @@ This plugin adds a lot of capabilities to a form, but, for customizability, it d
 ## Customizing
 You can add your own CSS to the form directly, or via extra classes. The results can be customized by editing the following classes:
  * `postcode-result`
- * `postcode-result-box`
- * `result-item`
+ * `postcode-result-box` (Contains both results and loader.) 
+ * `result-item` (Will always be used together with `postcode-result-box`. Selector: `.postcode-result-box.result-item`).
  * `postcode-left-part`
  * `postcode-right-part`
+ * `postcode-text-part`
 
 ## Example HTML Form
 ```
