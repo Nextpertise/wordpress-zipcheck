@@ -116,7 +116,14 @@ jQuery(document).ready(function($) {
         let title = "<h2>" + address["street"] + " " + address['housenr'].toString() + title_housenrext + " in " + address['municipality'] + "</h2>";
 
         $(".postcode-text-part").html(subtitle + title);
+      }
 
+      // Show message if no results are found
+      function updateHeaderNoResults(zipcode, housenr, ext){
+        ext = ext === "" ? "" : "-" + ext;
+        let title = "<h2>Geen resultaten gevonden voor " + zipcode.toUpperCase() + " " + housenr + ext + ".</h2>";
+
+        $(".postcode-text-part").html(title);
       }
     
 
@@ -180,6 +187,12 @@ jQuery(document).ready(function($) {
                 });
                 sortAllResults();
                 renderAllResults();
+              }
+              
+              // Check if there are any results
+              if(completedProvidercalls >= necessaryProviderCalls && resultsList.length === 0){
+                // Show error message if there are no results
+                updateHeaderNoResults(params['zipcheck-zipcode'], params['zipcheck-housenr'], params['zipcheck-ext']);
               }
             },
             val, 
