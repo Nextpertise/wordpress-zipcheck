@@ -1,6 +1,7 @@
 const MAXDROPDOWNLENGTH = 100;
-let $ = jQuery;
-
+if (typeof $ === 'undefined') {
+  let $ = jQuery;
+}
 function autocomplete(inp, arr) {
 
     // the autocomplete function takes two arguments,
