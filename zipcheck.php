@@ -263,7 +263,7 @@ function nextzipcheck_get_all_providers(){
         "params" => json_decode ("{}")
     ));
 
-    $api_request = nextzipcheck_api_request("https://api.nextpertise.nl/broadband/v1/", $request_data);
+    $api_request = nextzipcheck_api_request("https://api.nextpertise.nl/broadband/release/", $request_data);
     
     if($api_request['success']){
         $result = $api_request['response']->result;
@@ -288,7 +288,7 @@ function nextzipcheck_get_available_per_provider(){
         )
     ));
 
-    $api_request = nextzipcheck_api_request("https://api.nextpertise.nl/broadband/basic/v1", $request_data);
+    $api_request = nextzipcheck_api_request("https://api.nextpertise.nl/broadband/basic/release", $request_data);
 
     if($api_request['success']){
         $result = $api_request['response']->result;
