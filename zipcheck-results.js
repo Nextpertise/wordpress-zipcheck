@@ -206,7 +206,7 @@ jQuery(document).ready(function($) {
       // Create the HTML within JavaScript. Using normal `+` instead of template literals for IE 11 support.  
       function createResultBox(result){
         let title = "<h3>" + result['header'].replace('Fiber', 'Glasvezel') + "</h3>";
-        let subtitle = "<p> via " + result['provider'] + "</p>";
+        let subtitle = "<p> via " + result['network'] + "</p>";
         let speedup = '<h3><img src="https://nextpertise.nl/wp-content/uploads/2018/10/arrow-up.svg" alt="down">' + createSpeedDisplayValue(result['max_upload']) + '</h3>';
         let speeddown = '<h3><img src="https://nextpertise.nl/wp-content/uploads/2018/10/arrow-down.svg" alt="down">' + createSpeedDisplayValue(result['max_download']) + '</h3>';
         let shouldAddDivider = (result['area'] !== undefined && result['area'] != "" && result['distance'] !== undefined && result['distance'] != "")
